@@ -1,0 +1,28 @@
+# Môi trường ảo (Virtual Environments)
+venv/
+env/
+.env
+
+# Python Caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Jupyter Notebook Caches
+.ipynb_checkpoints/
+
+# Dữ liệu (Không push data lên Github để tránh nặng repo, mỗi máy tự chạy script tải về)
+data/raw/*.csv
+data/interim/*.csv
+data/processed/*.csv
+data/processed/*.npy
+
+# Thư mục chứa Model (File weight AI thường rất nặng)
+models/*.h5
+models/*.pkl
+models/*.keras
+
+# IDE settings
+.vscode/
+.idea/
