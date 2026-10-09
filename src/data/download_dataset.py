@@ -9,12 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 RAW_DATA_DIR = os.path.join(BASE_DIR, 'data', 'raw')
 
 def download_stock_data(ticker, start_date, end_date):
-    """
-    Hàm tải dữ liệu lịch sử của một mã chứng khoán từ Yahoo Finance
-    """
     print(f"Đang tải dữ liệu cho mã {ticker} từ {start_date} đến {end_date}...")
     
-    # Tải dữ liệu
     df = yf.download(ticker, start=start_date, end=end_date)
     
     if df.empty:
@@ -42,8 +38,7 @@ def download_stock_data(ticker, start_date, end_date):
     return file_path
 
 if __name__ == "__main__":
-    # Cấu hình các mã chứng khoán cần lấy
-    TICKERS = ['AAPL', 'MSFT', 'QQQ', 'NQ=F', 'ES=F', 'YM=F', 'GC=F'] # NQ, ES, YM, Gold (Ký hiệu Futures trên Yahoo Finance)
+    TICKERS = ['FPT.VN', 'HPG.VN', 'VCB.VN', 'SSI.VN', 'VNM.VN', 'MWG.VN']
     START_DATE = '2018-01-01'
     END_DATE = '2025-01-01'
     

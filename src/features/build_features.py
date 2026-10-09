@@ -3,24 +3,21 @@ import ta
 import os
 from pathlib import Path
 
-# Xác định đường dẫn thư mục
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 RAW_DATA_DIR = os.path.join(BASE_DIR, 'data', 'raw')
 INTERIM_DATA_DIR = os.path.join(BASE_DIR, 'data', 'interim')
 
 def add_technical_indicators(df):
-    """
-    Thêm các chỉ báo phân tích kỹ thuật (Technical Indicators) vào dữ liệu.
-    Sử dụng thư viện 'ta'.
-    """
-    # 1. Xử lý giá trị bị thiếu (nếu có) bằng cách lấy giá ngày hôm trước đắp vào
+    # Thêm các chỉ báo phân tích kỹ thuật (Technical Indicators) vào dữ liệu.
+    # Sử dụng thư viện 'ta'.
+    # Xử lý giá trị bị thiếu (nếu có) bằng cách lấy giá ngày hôm trước đắp vào
     df = df.ffill().bfill()
     
     # Sắp xếp đúng thứ tự thời gian
     df['Date'] = pd.to_datetime(df['Date'])
     df = df.sort_values('Date').reset_index(drop=True)
 
-    # 2. Trend Indicators (Chỉ báo xu hướng)
+    # Trend Indicators (Chỉ báo xu hướng)
     # Simple Moving Average (SMA)
     df['SMA_10'] = ta.trend.sma_indicator(df['Close'], window=10)
     df['SMA_50'] = ta.trend.sma_indicator(df['Close'], window=50)
@@ -29,11 +26,11 @@ def add_technical_indicators(df):
     macd = ta.trend.MACD(df['Close'])
     df['MACD'] = macd.macd()
     
-    # 3. Momentum Indicators (Chỉ báo động lượng)
+    # Momentum Indicators (Chỉ báo động lượng)
     # RSI (Relative Strength Index)
     df['RSI_14'] = ta.momentum.rsi(df['Close'], window=14)
     
-    # 4. Volatility Indicators (Độ biến động)
+    # Volatility Indicators (Độ biến động)
     # Bollinger Bands
     bollinger = ta.volatility.BollingerBands(df['Close'], window=20, window_dev=2)
     df['BB_High'] = bollinger.bollinger_hband()
