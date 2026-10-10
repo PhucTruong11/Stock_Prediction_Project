@@ -26,3 +26,6 @@ models/*.keras
 # IDE settings
 .vscode/
 .idea/
+
+# Chặn ảnh đồ thị (Không push ảnh lên mạng)
+reports/figures/*.png
