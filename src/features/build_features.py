@@ -20,7 +20,7 @@ def add_technical_indicators(df):
 
     # Trend Indicators (Chỉ báo xu hướng)
     # Simple Moving Average (SMA)
-    df['SMA_20'] = ta.trend.sma_indicator(df['Close'], window=20)
+    df['SMA_10'] = ta.trend.sma_indicator(df['Close'], window=10)
     df['SMA_50'] = ta.trend.sma_indicator(df['Close'], window=50)
     
     # MACD
