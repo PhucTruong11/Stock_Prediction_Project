@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import ta
 import os
 from pathlib import Path
@@ -19,22 +20,37 @@ def add_technical_indicators(df):
 
     # Trend Indicators (Chỉ báo xu hướng)
     # Simple Moving Average (SMA)
-    df['SMA_10'] = ta.trend.sma_indicator(df['Close'], window=10)
+    df['SMA_20'] = ta.trend.sma_indicator(df['Close'], window=20)
     df['SMA_50'] = ta.trend.sma_indicator(df['Close'], window=50)
     
     # MACD
     macd = ta.trend.MACD(df['Close'])
     df['MACD'] = macd.macd()
+    df['MACD_Signal'] = macd.macd_signal()
     
     # Momentum Indicators (Chỉ báo động lượng)
     # RSI (Relative Strength Index)
     df['RSI_14'] = ta.momentum.rsi(df['Close'], window=14)
+    
+    # Stochastic Oscillator
+    stoch = ta.momentum.StochasticOscillator(high=df['High'], low=df['Low'], close=df['Close'])
+    df['Stoch_K'] = stoch.stoch()
+    df['Stoch_D'] = stoch.stoch_signal()
     
     # Volatility Indicators (Độ biến động)
     # Bollinger Bands
     bollinger = ta.volatility.BollingerBands(df['Close'], window=20, window_dev=2)
     df['BB_High'] = bollinger.bollinger_hband()
     df['BB_Low'] = bollinger.bollinger_lband()
+    df['BB_Width'] = bollinger.bollinger_wband()
+    
+    # ATR (Average True Range)
+    df['ATR'] = ta.volatility.average_true_range(high=df['High'], low=df['Low'], close=df['Close'])
+    
+    # Price Action (Hành vi giá)
+    df['Daily_Return'] = df['Close'].pct_change()
+    df['Log_Return'] = np.log(df['Close'] / df['Close'].shift(1))
+    df['Price_Spread'] = df['High'] - df['Low']
     
     # LƯU Ý QUAN TRỌNG:
     # SMA_50 cần 50 ngày đầu tiên để lấy trung bình, nên 49 ngày đầu sẽ bị NaN (không có data).

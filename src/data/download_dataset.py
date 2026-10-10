@@ -10,8 +10,8 @@ RAW_DATA_DIR = os.path.join(BASE_DIR, 'data', 'raw')
 
 def download_stock_data(ticker, start_date, end_date):
     print(f"Đang tải dữ liệu cho mã {ticker} từ {start_date} đến {end_date}...")
-    
-    df = yf.download(ticker, start=start_date, end=end_date)
+    # kéo dữ liệu từ yfinance với auto_adjust=True để xử lý chia cổ tức
+    df = yf.download(ticker, start=start_date, end=end_date, auto_adjust=True)
     
     if df.empty:
         print(f"Không tìm thấy dữ liệu cho {ticker}.")
@@ -23,6 +23,12 @@ def download_stock_data(ticker, start_date, end_date):
     # Làm gọn tên cột (nếu bị MultiIndex do yfinance mới update)
     if isinstance(df.columns, pd.MultiIndex):
         df.columns = df.columns.droplevel(1)
+        
+    # Xử lý dữ liệu trùng lặp ngày giao dịch (nếu có)
+    df.drop_duplicates(subset=['Date'], keep='last', inplace=True)
+    
+    # Xử lý dữ liệu bị khuyết (Missing Values) bằng Forward Fill
+    df.ffill(inplace=True)
     
     # Định dạng lại cột Date để dễ nhìn
     df['Date'] = pd.to_datetime(df['Date']).dt.strftime('%Y-%m-%d')
